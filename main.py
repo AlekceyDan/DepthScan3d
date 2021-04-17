@@ -16,7 +16,7 @@ from telegram.ext import MessageHandler
 from telegram.ext import Filters
 from telegram.ext import CallbackQueryHandler
 #from echo.config import TG_TOKEN
-TG_TOKEN = "1183753875:AAGfNLR-E5SRp1_xD24pJgAdVuOezMfvWx8"
+TG_TOKEN = "your token"
 
 def do_start(bot: Bot, update: Update):
     bot.send_message(
