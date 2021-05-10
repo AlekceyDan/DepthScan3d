@@ -21,7 +21,7 @@ TG_TOKEN = "your token"
 def do_start(bot: Bot, update: Update):
     bot.send_message(
         chat_id=update.message.chat_id,
-        text = "Привет! Я бот, который умеет делать 3d модель по картинке. Отправь фото прямо сюда!"
+        text = "Привет! Я бот, который способен сделать 3d модель по картинке. Отправь пожайлуста фото прямо сюда!"
     )
 
 def do_help(bot: Bot, update: Update):
@@ -32,6 +32,7 @@ def do_help(bot: Bot, update: Update):
                "Признаки :\n"
                "Коши\nДаламбер\nГорячев\nРаабе"
     )
+
 def do_time(bot: Bot, update: Update):
     process = Popen(["date"], stdout=PIPE)
     text, error = process.communicate()
@@ -54,11 +55,36 @@ def handle_docs_photo(bot: Bot, update: Update):
 
         file_info = bot.get_file(update.message.photo[-1].file_id)
 
-        downloaded_file = file_info.download('C:/Users/User/'+"test.jpg")
-        bot.send_message(chat_id= chat_id, text = "Создаю модель...")
+        downloaded_file = file_info.download("test.png")
 
-        model.start('C:/Users/User/'+"test.jpg")
-        bot.send_message(chat_id=chat_id, text="Модель готова! Через некоторое время отправлю сюда.")
+
+        im = cv2.imread("test.png")
+        height, width, channels = im.shape
+
+        im = cv2.resize(im, (640, 480))
+
+        cv2.imwrite("test.png",im)
+
+
+
+
+        bot.send_message(chat_id= chat_id, text = "Создаю карту глубин...")
+        net.depth_net()
+
+
+        if height>width:
+            im = cv2.imread("depth.png")
+            im = cv2.resize(im, (240, 320))
+            cv2.imwrite("depth.png",im)
+
+        bot.send_message(chat_id= chat_id, text = "Карта глубин готова.")
+
+
+
+
+        bot.send_photo(chat_id= chat_id, photo = open('depth.png', 'rb'))
+        bot.send_message(chat_id= chat_id, text = "Создаю 3d модель")
+        make3d.start("depth.png")
         bot.send_document(chat_id=chat_id, document=open('test_3d.stl', 'rb'))
 
     except Exception as e:
