@@ -4,24 +4,23 @@ import numpy as np
 
 def start(im):
     fileStl = 'test_3d.stl'
-    fileIm = im
-    #fileIm = "test.jpg"
+    fileIm =  im
     stl = open(fileStl, 'w')
 
     im = cv2.imread(fileIm)
 
     im = cv2.flip(im, 1)
-    ''' 
+    '''
         *
-        * Чтобы не было резких границ сгаживаем, а также нормируем чтобы несильно вытянутой была модель 
+        * Чтобы не было резких границ сгаживаем, а также нормируем чтобы несильно вытянутой была модель
         *
     '''
-    im = cv2.normalize(im, im, 0, 30, norm_type=cv2.NORM_MINMAX)
+    #im = cv2.normalize(im, im, 0, 30, norm_type=cv2.NORM_MINMAX)
     im = cv2.GaussianBlur(im, (0, 0), 3)
 
     im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
-    # im = abs(255-im)
-    im = cv2.resize(im, (640, 240))
+    im = 255-im
+    #im = cv2.resize(im, (, 300))
 
     # gray = 255-gray
     # blur = cv2.resize(blur,(400,400))
